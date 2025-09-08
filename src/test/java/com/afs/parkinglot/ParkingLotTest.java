@@ -19,7 +19,7 @@ public class ParkingLotTest {
 
     // Given a parking lot with a parked car, and a parking ticket, When fetch the car, Then return the parked car.
     @Test
-    void should_return_parked_car_when_fetch_given_parking_lot_with_parked_car_and_parking_ticket() {
+    void should_return_parked_car_when_fetch_given_parking_lot_with_parked_car_and_correct_parking_ticket() {
 
         ParkingLot parkingLot = new ParkingLot(10);
         Car car = new Car();
@@ -32,7 +32,7 @@ public class ParkingLotTest {
 
     // Given a parking lot with two parked cars, and two parking tickets, When fetch the car twice, Then return the right car with each ticket
     @Test
-    void should_return_right_car_with_each_ticket_when_fetch_twice_given_parking_lot_with_two_parked_cars_and_two_parking_tickets() {
+    void should_return_right_car_with_each_ticket_when_fetch_twice_given_parking_lot_with_two_parked_cars_and_two_correct_parking_tickets() {
 
         ParkingLot parkingLot = new ParkingLot(10);
         Car car1 = new Car();
@@ -46,9 +46,10 @@ public class ParkingLotTest {
         assert fetchedCar1 == car1;
         assert fetchedCar2 == car2;
     }
+
     // Given a parking lot with parked car, and no ticket, When fetch the car, Then return nothing
     @Test
-    void should_return_nothing_when_fetch_given_parking_lot_with_parked_car_and_no_ticket() {
+    void should_throw_error_message_when_fetch_given_parking_lot_with_parked_car_and_no_ticket() {
 
         ParkingLot parkingLot = new ParkingLot(10);
         Car car = new Car();
@@ -63,7 +64,7 @@ public class ParkingLotTest {
 
     // Given a parking lot, and a wrong parking ticket, When fetch the car, Then return nothing.
     @Test
-    void should_return_nothing_when_fetch_given_parking_lot_and_wrong_parking_ticket() {
+    void should_throw_error_message_when_fetch_given_parking_lot_and_wrong_parking_ticket() {
 
         ParkingLot parkingLot = new ParkingLot(10);
         Car car = new Car();
@@ -78,7 +79,7 @@ public class ParkingLotTest {
 
     // Given a parking lot, and a used parking ticket, When fetch the car, Then return nothing.
     @Test
-    void should_return_nothing_when_fetch_given_parking_lot_and_used_parking_ticket() {
+    void should_throw_error_message_when_fetch_given_parking_lot_and_used_parking_ticket() {
 
         ParkingLot parkingLot = new ParkingLot(10);
         Car car = new Car();
@@ -94,7 +95,7 @@ public class ParkingLotTest {
 
     // Given a parking lot without any position, and a car, When park the car, Then return nothing
     @Test
-    void should_return_nothing_when_park_given_parking_lot_without_any_position_and_car() {
+    void should_throw_error_message_when_park_given_parking_lot_is_full_and_car() {
 
         ParkingLot parkingLot = new ParkingLot(10);
         for (int i = 0; i < 10; i++) {
@@ -152,7 +153,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    void should_return_nothing_when_fetch_given_parking_lot_with_parked_car_and_no_ticket_by_standard_boy() {
+    void should_throw_error_message_when_fetch_given_parking_lot_with_parked_car_and_no_ticket_by_standard_boy() {
 
         ParkingLot parkingLot = new ParkingLot(10);
         StandardParkingBoy standardParkingBoy = new StandardParkingBoy(parkingLot);
@@ -168,7 +169,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    void should_return_nothing_when_fetch_given_parking_lot_and_used_parking_ticket_by_standard_boy() {
+    void should_throw_error_message_when_fetch_given_parking_lot_and_used_parking_ticket_by_standard_boy() {
 
         ParkingLot parkingLot = new ParkingLot(10);
         StandardParkingBoy standardParkingBoy = new StandardParkingBoy(parkingLot);
@@ -184,7 +185,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    void should_return_nothing_when_park_given_parking_lot_without_any_position_and_car_by_standard_boy() {
+    void should_throw_error_message_when_park_given_parking_lot_without_any_position_and_car_by_standard_boy() {
 
         ParkingLot parkingLot1 = new ParkingLot(10);
         ParkingLot parkingLot2 = new ParkingLot(10);
@@ -201,7 +202,42 @@ public class ParkingLotTest {
         assertEquals("Not enough position.", exception.getMessage());
     }
 
+    // The standard smart boy
+    @Test
+    void should_park_in_second_parking_lot_when_second_has_more_space_given_two_parking_lots_and_smart_parking_boy(){
+        ParkingLot parkingLot1 = new ParkingLot(10);
+        ParkingLot parkingLot2 = new ParkingLot(10);
+        for (int i = 0; i < 7; i++) {
+            parkingLot1.park(new Car());
+        }
+        for (int i = 0; i < 2; i++) {
+            parkingLot2.park(new Car());
+        }
+        SmartParkingBoy smartParkingBoy = new SmartParkingBoy(parkingLot1, parkingLot2);
 
+        Car car = new Car();
+        ParkingTicket ticket = smartParkingBoy.park(car);
+
+        assertTrue(parkingLot2.has(ticket));
+    }
+
+    @Test
+    void should_park_in_first_parking_lot_when_first_and_second_have_same_space_given_two_parking_lots_and_smart_parking_boy(){
+        ParkingLot parkingLot1 = new ParkingLot(10);
+        ParkingLot parkingLot2 = new ParkingLot(10);
+        for (int i = 0; i < 5; i++) {
+            parkingLot1.park(new Car());
+        }
+        for (int i = 0; i < 5; i++) {
+            parkingLot2.park(new Car());
+        }
+        SmartParkingBoy smartParkingBoy = new SmartParkingBoy(parkingLot1, parkingLot2);
+
+        Car car = new Car();
+        ParkingTicket ticket = smartParkingBoy.park(car);
+
+        assertTrue(parkingLot1.has(ticket));
+    }
 
 
 
