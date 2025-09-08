@@ -118,7 +118,7 @@ public class ParkingLotTest {
         StandardParkingBoy standardParkingBoy = new StandardParkingBoy(parkingLot1, parkingLot2);
         ParkingTicket ticket = standardParkingBoy.park(new Car());
 
-        assertTrue(parkingLot2.has(ticket));
+        assertTrue(parkingLot1.has(ticket));
     }
 
     @Test
@@ -239,6 +239,24 @@ public class ParkingLotTest {
         assertTrue(parkingLot1.has(ticket));
     }
 
+    // The standard super boy
+    @Test
+    void should_park_in_second_parking_lot_when_first_is_full_given_two_parking_lots_and_super_parking_boy(){
+        ParkingLot parkingLot1 = new ParkingLot(20);
+        ParkingLot parkingLot2 = new ParkingLot(10);
+        for (int i = 0; i < 5; i++) {
+            parkingLot1.park(new Car());
+        }
+        for (int i = 0; i < 1; i++) {
+            parkingLot2.park(new Car());
+        }
+        SuperParkingBoy superParkingBoy = new SuperParkingBoy(parkingLot1, parkingLot2);
+
+        Car car = new Car();
+        ParkingTicket ticket = superParkingBoy.park(car);
+
+        assertTrue(parkingLot2.has(ticket));
+    }
 
 
 }
