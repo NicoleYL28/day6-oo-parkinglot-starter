@@ -32,5 +32,17 @@ public class ParkingLot {
         return parkedCars.size() >= CAPACITY;
     }
 
+    public boolean has(ParkingTicket ticket){
+        return parkedCars.containsKey(ticket);
+    }
+
+    public int getAvailableSpaces() {
+        return CAPACITY-parkedCars.size();
+    }
+
+    public double getCapacity() {
+        return CAPACITY;
+    }
+
 
 }
